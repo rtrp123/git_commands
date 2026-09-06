@@ -1,0 +1,1453 @@
+Absolutely bro. Based on your SE Lab instructions file, your exam has basically 3 major parts:
+
+GitHub → Clone → Maven/Eclipse → Fix pom.xml → Build
+Git → New branch → Add feature → Commit → Merge/Push
+Docker → Dockerfile → Build image → Run container → Docker Hub → Pull/stop/remove
+
+Your uploaded instructions specifically cover these workflows and the Docker commands below.
+
+I’ll give you an exam-ready step-by-step procedure, including what to type and what to do if errors appear.
+
+🔥 SE LAB EXAM — COMPLETE COMMAND CHEAT SHEET
+PART 1 — CLONE PROJECT FROM GITHUB
+Step 1: Open Eclipse
+
+Open:
+
+Eclipse IDE for Enterprise Java Developers
+
+Then:
+
+File
+ ↓
+Import
+ ↓
+Git
+ ↓
+Projects from Git (with smart import)
+ ↓
+Next
+
+Select:
+
+Clone URI
+
+Click Next.
+
+Enter the GitHub URL given by your faculty.
+
+Example:
+
+https://github.com/username/project.git
+
+Select:
+
+main
+
+or
+
+master
+
+Then choose the local directory and click Finish.
+
+Your project should appear in:
+
+Project Explorer
+
+This is exactly the Eclipse cloning procedure specified in your lab document.
+
+PART 2 — OPEN/IMPORT AS MAVEN PROJECT
+
+Look at the project.
+
+You should see:
+
+pom.xml
+src
+target   (may not exist initially)
+Important
+
+If you see:
+
+pom.xml
+
+it is a Maven project.
+
+If Eclipse doesn't recognize it:
+
+Right click project
+Configure
+   ↓
+Convert to Maven Project
+
+or:
+
+Right click
+ → Maven
+ → Update Project
+
+Select the project and click:
+
+OK
+PART 3 — pom.xml — VERY IMPORTANT
+
+The faculty may intentionally give you an incorrect pom.xml.
+
+You need to identify and correct it.
+
+Your lab document specifically says questions may involve:
+
+.m2/repository
+JUnit
+test
+build
+finalName
+dependencies
+pom.xml
+What is pom.xml?
+
+POM = Project Object Model
+
+It is the main configuration file of a Maven project.
+
+It contains things like:
+
+<groupId>
+<artifactId>
+<version>
+<dependencies>
+<build>
+PART 4 — COMMON pom.xml ERRORS
+Error 1 — Dependency problem
+
+Example:
+
+<dependency>
+    <groupId>junit</groupId>
+    <artifactId>junit</artifactId>
+    <version>4.13.2</version>
+    <scope>test</scope>
+</dependency>
+
+Important:
+
+<scope>test</scope>
+
+means the dependency is available for testing.
+
+Error 2 — Wrong dependency version
+
+If Maven says something like:
+
+Could not resolve dependency
+
+Check:
+
+groupId
+artifactId
+version
+
+Then:
+
+Right click project
+Maven
+ → Update Project
+ → Force Update of Snapshots/Releases
+ → OK
+PART 5 — .m2/repository
+
+Very common viva question.
+
+Maven downloads dependencies into:
+
+C:\Users\<username>\.m2\repository
+
+For example:
+
+C:\Users\ASUS\.m2\repository
+
+You normally do not manually put JAR files there.
+
+Maven automatically downloads dependencies specified in pom.xml.
+
+Viva:
+
+What is .m2?
+
+.m2 is Maven's local repository directory.
+
+What is .m2/repository?
+
+It stores downloaded Maven dependencies and plugins locally.
+
+PART 6 — BUILD MAVEN PROJECT
+
+Once pom.xml is corrected:
+
+Eclipse method
+
+Right click project:
+
+Run As
+ ↓
+Maven build...
+
+Enter:
+
+clean package
+
+Click:
+
+Run
+OR use Maven terminal
+
+Open terminal inside project directory.
+
+Check Maven:
+
+mvn -version
+
+Then:
+
+mvn clean
+
+Then:
+
+mvn test
+
+Then:
+
+mvn package
+
+Or simply:
+
+mvn clean package
+Most important command:
+mvn clean package
+What does mvn clean package mean?
+clean
+
+Deletes previous build output:
+
+target/
+package
+
+Compiles and packages the application.
+
+Depending on the project, it creates:
+
+.jar
+
+or
+
+.war
+
+inside:
+
+target/
+
+Your instructions explicitly say to build the project and verify the generated WAR/JAR inside target/.
+
+PART 7 — CHECK target
+
+After successful build:
+
+Project
+ ├── src
+ ├── pom.xml
+ └── target
+      └── projectname.war
+
+For example:
+
+target/LMSWEBP.war
+
+If it's a web application, normally you'll get:
+
+.war
+🚨 IF MAVEN BUILD FAILS
+
+Don't panic.
+
+Look at the first error in the console.
+
+Common problems:
+
+Java version problem
+
+Check:
+
+java -version
+
+and:
+
+mvn -version
+
+Make sure Eclipse/Maven are using the expected JDK.
+
+Dependency problem
+
+Try:
+
+mvn clean
+
+then:
+
+mvn clean install
+
+Or in Eclipse:
+
+Right click project
+→ Maven
+→ Update Project
+→ Force Update
+Skip tests if specifically necessary
+
+If the project has broken tests but the task only requires packaging:
+
+mvn clean package -DskipTests
+
+But don't automatically do this in the exam. If they expect you to fix the tests, fix them instead.
+
+🔥 PART 8 — GIT
+
+Your document says to open Git Bash from the Maven project using:
+
+Right click Maven project
+→ Show in Local Terminal
+→ Git Bash
+
+and then initialize Git, configure username/email, add, and commit.
+
+FIRST — CHECK GIT
+git --version
+
+Example:
+
+git version 2.x.x
+CONFIGURE GIT
+
+Do this only if not already configured:
+
+git config --global user.name "Your Name"
+git config --global user.email "your@email.com"
+
+Check:
+
+git config --global --list
+INITIALIZE REPOSITORY
+
+Inside your Maven project:
+
+git init
+CHECK STATUS
+git status
+
+You'll see files such as:
+
+pom.xml
+src/
+ADD FILES
+git add .
+
+. means:
+
+Add all files in the current project directory.
+
+Check:
+
+git status
+COMMIT
+git commit -m "first commit"
+
+Now your first commit is created.
+
+🔥 PART 9 — GIT BRANCH
+
+This is very important because your question says they will ask you to add a new feature using a new branch.
+
+Suppose your existing branch is:
+
+main
+
+Check:
+
+git branch
+Create feature branch
+
+Example feature:
+
+login-feature
+
+Command:
+
+git checkout -b login-feature
+
+This does two things:
+
+Creates branch
+Switches to that branch
+
+Check:
+
+git branch
+
+You'll see:
+
+* login-feature
+  main
+
+* means you're currently on that branch.
+
+⭐ NEW GIT COMMAND
+
+Modern alternative:
+
+git switch -c login-feature
+
+But for your exam, I recommend remembering:
+
+git checkout -b login-feature
+PART 10 — ADD THE NEW FEATURE
+
+Now stay on your feature branch.
+
+Modify the Java code / HTML / JSP / whatever feature they give.
+
+For example, they might say:
+
+Add a new phoneNumber field.
+
+You edit the appropriate files.
+
+Then:
+
+git status
+
+You should see:
+
+modified:
+ADD THE FEATURE
+git add .
+
+Then:
+
+git commit -m "Added phone number feature"
+CHECK HISTORY
+git log --oneline
+
+You may see:
+
+a123456 Added phone number feature
+b123456 first commit
+PART 11 — SWITCH BACK TO MAIN
+git checkout main
+
+Check:
+
+git branch
+
+Now:
+
+* main
+  login-feature
+PART 12 — MERGE FEATURE
+git merge login-feature
+
+If successful:
+
+Fast-forward
+
+or a merge commit will be created.
+
+Check:
+
+git log --oneline
+⭐ COMPLETE FEATURE WORKFLOW
+
+Memorize this sequence:
+
+git status
+
+git checkout -b feature1
+
+# MAKE YOUR CODE CHANGES
+
+git status
+
+git add .
+
+git commit -m "Added feature1"
+
+git checkout main
+
+git merge feature1
+
+git status
+
+That is probably one of the most important sequences for your exam.
+
+PART 13 — PUSH TO GITHUB
+
+Create a repository on your GitHub account.
+
+Suppose:
+
+Repository = LMSWEBP
+
+Then:
+
+git branch -M main
+
+Add remote:
+
+git remote add origin https://github.com/YOURUSERNAME/LMSWEBP.git
+
+Check:
+
+git remote -v
+
+Then:
+
+git push -u origin main
+
+Your lab document demonstrates the same process, using origin1 when avoiding an existing owner's remote.
+
+⚠️ ACCESS DENIED / WRONG GITHUB ACCOUNT
+
+This is specifically mentioned in your instructions.
+
+If you get:
+
+remote: Permission denied
+
+or:
+
+403
+
+check whether an old GitHub credential is saved in Windows.
+
+Go to:
+
+Control Panel
+ → Credential Manager
+ → Windows Credentials
+
+Look for GitHub credentials and remove the incorrect saved account.
+
+Your lab document explicitly warns about existing Windows GitHub credentials causing push/access problems.
+
+PART 14 — GIT COMMANDS FOR SCENARIO QUESTIONS
+
+These are very important for your viva/SQB.
+
+Check status
+git status
+Show branches
+git branch
+Create branch
+git branch feature1
+Create + switch branch
+git checkout -b feature1
+Switch branch
+git checkout main
+Delete branch
+git branch -d feature1
+Add one file
+git add filename.java
+Add everything
+git add .
+Commit
+git commit -m "message"
+View commits
+git log
+
+Short version:
+
+git log --oneline
+GIT RESTORE
+
+If you modified a file but didn't commit and want to discard the modification:
+
+git restore filename.java
+
+For all modified files:
+
+git restore .
+
+⚠️ Be careful — this can discard your uncommitted changes.
+
+GIT STASH
+
+Suppose:
+
+You are working on Feature A
+
+but suddenly faculty says:
+
+Switch to another branch.
+
+You have uncommitted work.
+
+Use:
+
+git stash
+
+Your changes are temporarily stored.
+
+Switch branch:
+
+git checkout main
+
+Later return:
+
+git checkout feature1
+
+Restore changes:
+
+git stash pop
+Remember:
+stash = temporarily keep unfinished changes
+GIT REVERT
+
+If a commit was made and you want to undo it safely with another commit:
+
+git revert <commit-id>
+
+Example:
+
+git revert a123456
+Important difference
+restore → working file changes
+stash → temporarily store changes
+revert → undo a committed change by creating another commit
+MERGE CONFLICT
+
+Suppose:
+
+main
+feature1
+
+Both changed the same lines.
+
+You do:
+
+git checkout main
+git merge feature1
+
+Git may show:
+
+CONFLICT
+
+Open the conflicted file.
+
+You'll see:
+
+<<<<<<< HEAD
+main version
+=======
+feature version
+>>>>>>> feature1
+
+Choose the correct code and remove the conflict markers.
+
+Then:
+
+git add .
+
+and:
+
+git commit -m "Resolved merge conflict"
+.gitignore
+
+Create a file named:
+
+.gitignore
+
+For a Maven project, you commonly ignore:
+
+target/
+
+Example:
+
+target/
+.classpath
+.project
+.settings/
+
+Why?
+
+Because:
+
+target/
+
+contains generated build files and generally shouldn't be committed.
+
+🔥 PART 15 — DOCKER
+
+Your lab document says the Docker experiment is to containerize the Maven project, create a Dockerfile, build an image, run it on a specified port, and push it to Docker Hub.
+
+BEFORE DOCKER
+
+Make sure Docker Desktop is running.
+
+Check:
+
+docker --version
+
+Then:
+
+docker ps
+
+If Docker is working, you'll get a container list.
+
+Your document uses:
+
+docker ps -a
+
+to list containers.
+
+DOCKER IMAGES
+docker image ls
+
+This shows your locally available images.
+
+LOGIN
+docker login
+
+Enter your Docker Hub credentials when prompted.
+
+Your lab instructions explicitly include docker login.
+
+🔥 PART 16 — CREATE DOCKERFILE
+
+Your Maven project should already have:
+
+target/
+   project.war
+
+Create a file with exactly this name:
+
+Dockerfile
+
+No:
+
+Dockerfile.txt
+For Maven WAR + Tomcat
+
+Your document gives:
+
+FROM tomcat:9.0
+
+COPY target/*.war /usr/local/tomcat/webapps/ROOT.war
+
+EXPOSE 8080
+
+CMD ["catalina.sh","run"]
+
+The document explains that Tomcat listens on 8080 by default, and EXPOSE does not itself change the port.
+
+Understand Dockerfile
+Line 1
+FROM tomcat:9.0
+
+Means:
+
+Use Tomcat 9 as the base image.
+
+Line 2
+COPY target/*.war /usr/local/tomcat/webapps/ROOT.war
+
+Means:
+
+Copy the Maven-generated WAR into Tomcat's webapps folder.
+
+Because it's named:
+
+ROOT.war
+
+your application runs at:
+
+/
+
+instead of:
+
+/projectname/
+
+Your document explains this behavior.
+
+Line 3
+EXPOSE 8080
+
+Means:
+
+Document that the container application uses port 8080.
+
+It does not actually publish the port to your computer.
+
+Line 4
+CMD ["catalina.sh","run"]
+
+Starts Tomcat in the foreground.
+
+PART 17 — BUILD DOCKER IMAGE
+
+First make sure you're inside the Maven project:
+
+project/
+ ├── Dockerfile
+ ├── pom.xml
+ ├── src/
+ └── target/
+       └── project.war
+
+Then:
+
+docker build -t lmsimage .
+
+Your document uses exactly this example.
+
+What does this mean?
+docker build
+
+Build an image.
+
+-t
+
+Give the image a name/tag.
+
+lmsimage
+
+Image name.
+
+.
+
+Current directory is the build context.
+
+CHECK IMAGE
+docker image ls
+
+You should see:
+
+lmsimage
+🔥 PART 18 — RUN DOCKER CONTAINER
+
+Your document uses:
+
+docker run -d -p 7089:8080 --name lmcontainer lmsimage
+
+Memorize this:
+
+docker run -d -p 7089:8080 --name lmcontainer lmsimage
+Understand 7089:8080
+
+This is VERY important.
+
+HOST : CONTAINER
+7089 : 8080
+
+Meaning:
+
+Your PC port 7089
+        ↓
+Docker container port 8080
+        ↓
+Tomcat
+
+So open:
+
+http://localhost:7089/
+
+Your lab document says to check the application at localhost:7089.
+
+Docker -d
+-d
+
+means:
+
+detached mode
+
+Container runs in the background.
+
+Docker --name
+--name lmcontainer
+
+gives your container a name.
+
+So instead of remembering a container ID, you can use:
+
+lmcontainer
+CHECK CONTAINER
+docker ps
+
+or:
+
+docker ps -a
+VIEW LOGS
+
+Very useful if your application doesn't open:
+
+docker logs lmcontainer
+
+Follow logs continuously:
+
+docker logs -f lmcontainer
+STOP CONTAINER
+docker stop lmcontainer
+
+Your document also demonstrates:
+
+docker stop <containerid>
+
+START STOPPED CONTAINER
+
+If you stopped it:
+
+docker start lmcontainer
+
+Then:
+
+docker ps
+REMOVE CONTAINER
+
+First stop it:
+
+docker stop lmcontainer
+
+Then:
+
+docker rm lmcontainer
+
+Your document demonstrates docker rm <containerid>.
+
+🔥 PART 19 — DOCKER HUB
+
+Suppose your Docker Hub username is:
+
+myusername
+
+Your image:
+
+lmsimage
+
+Tag it:
+
+docker tag lmsimage myusername/lmsimage:latest
+
+Then:
+
+docker push myusername/lmsimage:latest
+
+This follows the format specified in your lab document:
+
+<dockerhub-username>/<repository-name>:<tag>
+
+CHECK DOCKER HUB
+
+Go to Docker Hub and check your repository.
+
+You should see:
+
+lmsimage
+🔥 PART 20 — PULL IMAGE
+
+If the image isn't locally available:
+
+docker pull myusername/lmsimage:latest
+
+Check:
+
+docker image ls
+RUN UBUNTU INTERACTIVE MODE
+
+Your lab document specifically mentions pulling/running Ubuntu and interactive mode.
+
+Run:
+
+docker run ubuntu
+
+Interactive:
+
+docker run -it ubuntu bash
+
+Now you'll enter the Ubuntu container.
+
+You'll see something similar to:
+
+root@xxxxxxxx:/#
+
+Try:
+
+pwd
+ls
+
+Then:
+
+exit
+⭐ DOCKER COMMANDS YOU MUST MEMORIZE
+Task	Command
+Docker version	docker --version
+List running containers	docker ps
+List all containers	docker ps -a
+List images	docker image ls
+Login	docker login
+Pull image	docker pull image
+Build image	docker build -t name .
+Run container	docker run image
+Run background	docker run -d image
+Port mapping	docker run -p 7089:8080 image
+Named container	docker run --name app image
+Stop	docker stop container
+Start	docker start container
+Remove container	docker rm container
+Remove image	docker rmi image
+Logs	docker logs container
+Interactive	docker run -it ubuntu bash
+Tag	docker tag image username/repo:tag
+Push	docker push username/repo:tag
+Pull	docker pull username/repo:tag
+🚨 VERY IMPORTANT SCENARIO QUESTIONS
+
+They said scenario-based questions will be asked, so memorize these.
+
+Scenario 1
+"You modified the code but haven't committed it. You want to temporarily save it."
+
+Answer:
+
+git stash
+
+Later:
+
+git stash pop
+Scenario 2
+"You want to create a new branch for a feature."
+git checkout -b feature1
+Scenario 3
+"You want to switch to main."
+git checkout main
+Scenario 4
+"You want to merge feature1 into main."
+git checkout main
+git merge feature1
+Scenario 5
+"You accidentally modified a file and don't want the changes."
+git restore filename
+Scenario 6
+"You want to undo an already committed change."
+git revert <commit-id>
+Scenario 7
+"You want to see which files changed."
+git status
+Scenario 8
+"You want to see previous commits."
+git log --oneline
+Scenario 9
+"You want to build a Maven project."
+mvn clean package
+Scenario 10
+"Where is Maven's local repository?"
+~/.m2/repository
+
+On Windows:
+
+C:\Users\<username>\.m2\repository
+Scenario 11
+"Where is Maven's generated WAR/JAR?"
+target/
+Scenario 12
+"Create Docker image."
+docker build -t lmsimage .
+Scenario 13
+"Run the image on port 7089."
+docker run -d -p 7089:8080 --name lmcontainer lmsimage
+Scenario 14
+"Application isn't opening. What do you check?"
+
+First:
+
+docker ps
+
+Then:
+
+docker logs lmcontainer
+
+Then check:
+
+http://localhost:7089/
+Scenario 15
+"Stop the container."
+docker stop lmcontainer
+Scenario 16
+"Start a stopped container."
+docker start lmcontainer
+Scenario 17
+"Delete a container."
+docker stop lmcontainer
+docker rm lmcontainer
+Scenario 18
+"Push Docker image to Docker Hub."
+docker login
+docker tag lmsimage username/lmsimage:latest
+docker push username/lmsimage:latest
+🔥 COMPLETE EXAM FLOW
+
+If they give you a GitHub Maven project and say:
+
+Clone it, fix Maven errors, add a feature using Git branch, and Dockerize it.
+
+Follow this exact order.
+
+🟢 STEP 1 — Clone
+
+Eclipse:
+
+File
+→ Import
+→ Git
+→ Projects from Git
+→ Clone URI
+🟢 STEP 2 — Maven
+
+Check:
+
+pom.xml
+
+Fix dependencies/configuration.
+
+Then:
+
+mvn clean package
+
+Check:
+
+target/
+
+Make sure WAR/JAR exists.
+
+🟢 STEP 3 — Git
+git status
+
+If necessary:
+
+git init
+
+Then:
+
+git add .
+git commit -m "Initial commit"
+🟢 STEP 4 — Feature branch
+git checkout -b feature1
+
+Modify code.
+
+Then:
+
+git status
+git add .
+git commit -m "Added feature1"
+🟢 STEP 5 — Merge
+git checkout main
+git merge feature1
+🟢 STEP 6 — Push
+
+If your GitHub repository is created:
+
+git remote add origin https://github.com/YOURUSERNAME/REPOSITORY.git
+
+Then:
+
+git branch -M main
+git push -u origin main
+🟠 STEP 7 — Docker
+
+Make sure:
+
+target/project.war
+
+exists.
+
+Create:
+
+Dockerfile
+
+Put:
+
+FROM tomcat:9.0
+COPY target/*.war /usr/local/tomcat/webapps/ROOT.war
+EXPOSE 8080
+CMD ["catalina.sh","run"]
+
+Build:
+
+docker build -t lmsimage .
+
+Run:
+
+docker run -d -p 7089:8080 --name lmcontainer lmsimage
+
+Check:
+
+docker ps
+
+Open:
+
+http://localhost:7089/
+🟠 STEP 8 — Docker Hub
+docker login
+docker tag lmsimage YOURUSERNAME/lmsimage:latest
+docker push YOURUSERNAME/lmsimage:latest
+🟠 STEP 9 — Test Docker commands
+docker image ls
+docker ps -a
+docker stop lmcontainer
+docker start lmcontainer
+docker logs lmcontainer
+
+If required:
+
+docker stop lmcontainer
+docker rm lmcontainer
+🧠 HARD VIVA — MUST KNOW
+Maven
+What is Maven?
+
+Maven is a build and dependency management tool for Java projects.
+
+What is POM?
+
+POM stands for Project Object Model and pom.xml contains Maven project configuration and dependencies.
+
+What is dependency?
+
+A library required by the project.
+
+What is .m2?
+
+Maven's local repository.
+
+What is target?
+
+Directory containing generated build artifacts such as WAR/JAR.
+
+What does mvn clean do?
+
+Removes previous build output, mainly the target directory.
+
+What does mvn package do?
+
+Compiles, tests as configured, and packages the application into a JAR/WAR.
+
+🧠 Git VIVA
+Git vs GitHub?
+
+Git is a version control system. GitHub is a cloud platform for hosting Git repositories.
+
+What is a branch?
+
+An independent line of development.
+
+Why use a feature branch?
+
+To develop a feature separately without directly modifying the main branch.
+
+What is commit?
+
+A saved snapshot of changes in the Git repository.
+
+git add?
+
+Moves changes to the staging area.
+
+git commit?
+
+Saves staged changes as a commit.
+
+git push?
+
+Uploads local commits to a remote repository.
+
+git pull?
+
+Fetches and integrates changes from a remote repository.
+
+git clone?
+
+Creates a local copy of a remote repository.
+
+git merge?
+
+Combines changes from one branch into another.
+
+git stash?
+
+Temporarily stores uncommitted changes.
+
+git revert?
+
+Creates a new commit that reverses an earlier commit.
+
+🧠 DOCKER VIVA
+What is Docker?
+
+Docker is a platform used to package and run applications in containers.
+
+Image vs Container?
+
+Image:
+
+Read-only template used to create containers.
+
+Container:
+
+Running/created instance of an image.
+
+Remember:
+
+IMAGE → creates → CONTAINER
+What is Dockerfile?
+
+A text file containing instructions for building a Docker image.
+
+What is FROM?
+FROM tomcat:9.0
+
+Specifies the base image.
+
+What is COPY?
+COPY target/*.war ...
+
+Copies files from the build context into the image.
+
+What is EXPOSE?
+
+Documents the port the containerized application listens on. It doesn't itself publish the port.
+
+What is docker build?
+
+Builds an image from a Dockerfile.
+
+What is docker run?
+
+Creates and starts a container from an image.
+
+What is -d?
+
+Detached/background mode.
+
+What is -p?
+
+Publishes/maps a host port to a container port.
+
+For:
+
+-p 7089:8080
+
+remember:
+
+7089 = host
+8080 = container
+What is Docker Hub?
+
+A registry for storing and sharing Docker images.
+
+🚨 ONE-PAGE MEMORY SHEET
+
+If you have very little time before the exam, memorize this:
+
+# MAVEN
+mvn -version
+mvn clean
+mvn test
+mvn package
+mvn clean package
+# GIT
+git --version
+git status
+git init
+git add .
+git commit -m "message"
+git branch
+git checkout -b feature1
+git checkout main
+git merge feature1
+git log --oneline
+git stash
+git stash pop
+git restore filename
+git revert <commit-id>
+git remote -v
+git push -u origin main
+# DOCKER
+docker --version
+docker login
+docker ps
+docker ps -a
+docker image ls
+docker build -t lmsimage .
+docker run -d -p 7089:8080 --name lmcontainer lmsimage
+docker logs lmcontainer
+docker stop lmcontainer
+docker start lmcontainer
+docker rm lmcontainer
+docker tag lmsimage username/lmsimage:latest
+docker push username/lmsimage:latest
+docker pull username/lmsimage:latest
+docker run -it ubuntu bash
+Dockerfile
+FROM tomcat:9.0
+COPY target/*.war /usr/local/tomcat/webapps/ROOT.war
+EXPOSE 8080
+CMD ["catalina.sh","run"]
+Final application:
+http://localhost:7089/
+
+These Docker steps and the Tomcat Dockerfile structure are directly based on pages 3–6 of your lab document.
+
+⭐ Most important thing for tomorrow
+
+Don't just memorize commands. Remember this flow:
+
+GITHUB
+   ↓
+CLONE
+   ↓
+ECLIPSE
+   ↓
+MAVEN / pom.xml
+   ↓
+mvn clean package
+   ↓
+target/project.war
+   ↓
+GIT BRANCH
+   ↓
+ADD FEATURE
+   ↓
+git add .
+   ↓
+git commit
+   ↓
+MERGE
+   ↓
+PUSH GITHUB
+   ↓
+Dockerfile
+   ↓
+docker build
+   ↓
+Docker image
+   ↓
+docker run
+   ↓
+localhost:7089
+   ↓
+docker tag
+   ↓
+docker push
+   ↓
+Docker Hub
+
+This is the complete exam workflow from your instructions. Your document also explicitly says the Docker viva will cover image vs. container, pulling/running images, listing, stopping, starting, interactive mode, building and port mapping.
+
+If you want, I can next give you a “tomorrow lab exam simulation” with 20 scenario questions + exact commands you should type for each + hard viva questions with one-line answers, so you can practice exactly like the exam.
